@@ -1,9 +1,7 @@
 "use client";
 import React, { FormEvent } from "react";
 
-type Props = {};
-
-export default function RegisterForm({}: Props) {
+export default function RegisterForm() {
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
