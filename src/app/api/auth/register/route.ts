@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     `;
     return NextResponse.json({
       data: response,
-      status: "Successfully create user",
+      status: "Successfully create user.",
     });
   } catch (e) {
     return NextResponse.json({

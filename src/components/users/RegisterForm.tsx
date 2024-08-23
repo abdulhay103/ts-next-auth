@@ -1,4 +1,5 @@
 "use client";
+import { ErrorToast, SuccessToast } from "@/utils/formHealper";
 import React, { FormEvent } from "react";
 import toast from "react-hot-toast";
 
@@ -13,10 +14,12 @@ export default function RegisterForm() {
         password: formData.get("password"),
       }),
     });
-    if (response.ok) {
-      toast.success("Success");
+    const json = await response.json();
+
+    if (json.status == "Successfully create user.") {
+      SuccessToast(json.status);
     } else {
-      toast.error("Failed to create user");
+      ErrorToast(json.status);
     }
   };
   return (
@@ -31,14 +34,14 @@ export default function RegisterForm() {
           className=" border border-red-800 rounded py-2 px-4 text-green-500 placeholder:text-gray-500"
           placeholder="Email"
           name="email"
-          id=""
+          id="email"
         />
         <input
           type="password"
           className=" border  border-red-800 rounded py-2 px-4 text-green-500 placeholder:text-gray-500"
           placeholder="Password"
           name="password"
-          id=""
+          id="password"
         />
         <button
           type="submit"
