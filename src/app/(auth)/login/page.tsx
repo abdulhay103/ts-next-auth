@@ -1,7 +1,5 @@
-import React from "react";
+import LoginForm from "@/components/users/LoginForm";
 
-type Props = {};
-
-export default function page({}: Props) {
-  return <div>Login Page</div>;
+export default function LoginPage() {
+  return <LoginForm />;
 }

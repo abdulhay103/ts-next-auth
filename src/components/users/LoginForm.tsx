@@ -1,23 +1,16 @@
 "use client";
+import { signIn } from "next-auth/react";
 import React, { FormEvent } from "react";
-import toast from "react-hot-toast";
 
-export default function RegisterForm() {
+export default function LoginForm() {
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const response = await fetch("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify({
-        email: formData.get("email"),
-        password: formData.get("password"),
-      }),
+    signIn("credentials", {
+      email: formData.get("email"),
+      password: formData.get("password"),
+      redirect: false,
     });
-    if (response.ok) {
-      toast.success("Success");
-    } else {
-      toast.error("Failed to create user");
-    }
   };
   return (
     <div className=" flex min-h-screen justify-center w-full items-center">
