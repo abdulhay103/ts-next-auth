@@ -1,40 +1,32 @@
 "use client";
 import { ErrorToast, SuccessToast } from "@/utils/formHealper";
-import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { FormEvent } from "react";
 
-export default function RegisterForm() {
+export default function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-
-    // Optional: Validation check before submitting
-    if (!formData.get("email") || !formData.get("password")) {
-      ErrorToast("Email and Password are required.");
-      return;
-    }
-
-    const response = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: formData.get("email"),
-        password: formData.get("password"),
-      }),
+    const response = await signIn("credentials", {
+      email: formData.get("email"),
+      password: formData.get("password"),
+      redirect: false,
+      callbackUrl: callbackUrl,
     });
 
-    const json = await response.json();
+    console.log(response);
 
-    if (response.ok && json.status === "Successfully create user.") {
-      SuccessToast(json.status);
-      router.push("/login");
-      router.refresh();
+    if (!response?.ok) {
+      ErrorToast("Invalid Email or Password");
     } else {
-      ErrorToast(json.status || "Registration failed.");
+      SuccessToast("Login Success");
+      router.push(response?.url || callbackUrl);
+      router.refresh();
     }
   };
 
@@ -64,7 +56,7 @@ export default function RegisterForm() {
           type="submit"
           className="px-5 py-2 bg-green-500 text-white rounded"
         >
-          Register
+          Login
         </button>
       </form>
     </div>

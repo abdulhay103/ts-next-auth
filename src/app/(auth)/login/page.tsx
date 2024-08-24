@@ -1,7 +1,11 @@
-import React from "react";
+import LoginForm from "@/components/users/LoginForm";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-type Props = {};
-
-export default function page({}: Props) {
-  return <div>Login Page</div>;
+export default async function LoginPage() {
+  const session = await getServerSession();
+  if (session) {
+    redirect("/");
+  }
+  return <LoginForm />;
 }
